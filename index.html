@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hayrat Takip — Akıllı Hayrat Yönetim Sistemi</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#5E81F4;
+  --blue-dark:#475EAA;
+  --red:#FF808B;
+  --navy:#1a1a2e;
+  --navy2:#16213e;
+  --text:#1C1D21;
+  --muted:#5a5a7a;
+  --bg:#F5F5FA;
+  --white:#ffffff;
+  --border:#E8E8F0;
+  --success:#7CE7AC;
+  --warning:#F4BE5E;
+  --danger:#FF808B;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:linear-gradient(150deg,#f6f8ff 0%,#edf0ff 40%,#fff3f4 100%) fixed;overflow-x:hidden;font-size:19px;line-height:1.7}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:all 0.3s}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-logo-mark{width:40px;height:40px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center}
+.nav-logo-mark span{color:white;font-weight:700;font-size:20px;font-family:'Sora',sans-serif}
+.nav-logo-text{font-size:20px;font-weight:600;color:var(--text);font-family:'Sora',sans-serif;letter-spacing:-0.3px}
+.nav-logo-text em{color:var(--blue);font-style:normal}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:15px;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--blue);color:white;padding:12px 28px;border-radius:10px;text-decoration:none;font-size:15px;font-weight:600;transition:all 0.2s;letter-spacing:0.1px}
+.nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px)}
+.nav-ghost{background:transparent;color:var(--blue);padding:12px 28px;border-radius:10px;text-decoration:none;font-size:15px;font-weight:600;transition:all 0.2s;letter-spacing:0.1px;border:2px solid var(--blue)}
+.nav-ghost:hover{background:var(--blue);color:white}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 48px 20px;background:transparent;position:relative;overflow:visible}
+.hero-blob1{position:absolute;top:-150px;right:-100px;width:700px;height:700px;background:radial-gradient(circle,rgba(94,129,244,0.1) 0%,transparent 65%);border-radius:50%;pointer-events:none}
+.hero-blob2{position:absolute;bottom:-150px;left:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,128,139,0.07) 0%,transparent 65%);border-radius:50%;pointer-events:none}
+.hero-inner{max-width:1240px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(94,129,244,0.08);border:1px solid rgba(94,129,244,0.18);border-radius:100px;padding:7px 18px;font-size:14px;font-weight:600;color:var(--blue);margin-bottom:28px}
+.hero-badge-dot{width:7px;height:7px;background:var(--blue);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.4)}}
+.hero h1{font-family:'Sora',sans-serif;font-size:58px;font-weight:600;line-height:1.12;margin-bottom:24px;color:var(--navy);letter-spacing:-1px}
+.hero h1 em{color:var(--blue);font-style:normal}
+.hero-sub{font-size:19px;font-weight:400;color:var(--muted);line-height:1.75;margin-bottom:40px;max-width:500px}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:56px}
+.btn-primary{background:var(--blue);color:white;padding:16px 36px;border-radius:12px;text-decoration:none;font-weight:600;font-size:16px;display:inline-flex;align-items:center;transition:all 0.25s;border:none;cursor:pointer;letter-spacing:0.1px}
+.btn-primary:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 10px 28px rgba(94,129,244,0.32)}
+.btn-secondary{background:white;color:var(--text);padding:16px 36px;border-radius:12px;text-decoration:none;font-weight:600;font-size:16px;display:inline-flex;align-items:center;transition:all 0.25s;border:2px solid var(--border)}
+.btn-secondary:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.07)}
+.hero-stats{display:flex;gap:40px;padding-top:32px;border-top:1px solid var(--border)}
+.hero-stat-num{font-size:32px;font-weight:700;color:var(--navy);font-family:'Sora',sans-serif;letter-spacing:-0.5px}
+.hero-stat-label{font-size:14px;color:var(--muted);margin-top:3px;font-weight:400}
+
+/* PHONE MOCKUP */
+.hero-visual{position:relative;display:flex;justify-content:center;align-items:center}
+.phone-frame{width:290px;background:#0f0f1a;border-radius:40px;padding:12px;box-shadow:0 50px 100px rgba(15,15,26,0.28),0 20px 40px rgba(94,129,244,0.12);position:relative;z-index:2;animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-14px) rotate(1deg)}}
+.phone-notch{width:80px;height:22px;background:#0f0f1a;border-radius:0 0 14px 14px;margin:0 auto 8px}
+.phone-screen{background:var(--bg);border-radius:28px;overflow:hidden;min-height:500px}
+.phone-header{background:white;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.phone-header-title{font-size:13px;font-weight:700;color:var(--text)}
+.phone-header-badge{background:var(--blue);color:white;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px}
+.phone-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+.phone-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.phone-stat{background:white;border-radius:14px;padding:14px;border:1px solid var(--border)}
+.phone-stat-label{font-size:10px;color:var(--muted);margin-bottom:5px;font-weight:500}
+.phone-stat-val{font-size:22px;font-weight:700;color:var(--text)}
+.phone-stat-val.blue{color:var(--blue)}
+.phone-stat-val.red{color:var(--red)}
+.phone-stat-val.green{color:#16a34a}
+.phone-list{background:white;border-radius:14px;padding:12px;border:1px solid var(--border)}
+.phone-list-title{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.8px}
+.phone-list-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.phone-list-item:last-child{border-bottom:none;padding-bottom:0}
+.phone-list-name{font-size:12px;font-weight:600;color:var(--text)}
+.phone-list-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.phone-list-badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.badge-dolu{background:rgba(124,231,172,0.15);color:#15803d}
+.badge-bos{background:rgba(255,128,139,0.12);color:#dc2626}
+.badge-yarim{background:rgba(244,190,94,0.15);color:#b45309}
+
+/* Float cards */
+.float-card{position:absolute;background:white;border-radius:18px;padding:16px 20px;box-shadow:0 12px 40px rgba(0,0,0,0.1);border:1px solid var(--border)}
+.float-card-1{top:8%;left:-70px;animation:float2 5s ease-in-out infinite}
+.float-card-2{bottom:12%;right:-60px;animation:float2 5s ease-in-out infinite 1.2s}
+@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.float-card-label{font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:500}
+.float-card-val{font-size:22px;font-weight:700;color:var(--text);font-family:'Sora',sans-serif}
+.float-card-change{font-size:12px;font-weight:600;color:#16a34a;margin-top:3px}
+.float-card-change.warn{color:#b45309}
+
+/* SECTION COMMON */
+.section-inner{max-width:1240px;margin:0 auto}
+.section-tag{display:inline-block;background:rgba(94,129,244,0.07);color:var(--blue);font-size:13px;font-weight:600;padding:5px 16px;border-radius:100px;margin-bottom:18px;letter-spacing:0.8px;text-transform:uppercase}
+.section-title{font-family:'Sora',sans-serif;font-size:44px;font-weight:600;color:var(--navy);margin-bottom:18px;line-height:1.15;letter-spacing:-0.8px}
+.section-title em{color:var(--blue);font-style:normal}
+.section-sub{font-size:20px;font-weight:400;color:var(--muted);max-width:560px;line-height:1.75;margin-bottom:80px}
+
+/* HERO VISUAL */
+.hero-visual{position:relative;display:flex;justify-content:center}
+.phone-frame{width:280px;background:var(--navy);border-radius:36px;padding:12px;box-shadow:0 40px 80px rgba(26,26,46,0.25);position:relative;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.phone-screen{background:var(--bg);border-radius:26px;overflow:hidden}
+.phone-header{background:var(--white);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.phone-header-title{font-size:13px;font-weight:700;color:var(--text)}
+.phone-header-badge{background:var(--blue);color:white;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
+.phone-body{padding:12px}
+.phone-stat-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.phone-stat{background:white;border-radius:12px;padding:12px;border:1px solid var(--border)}
+.phone-stat-label{font-size:10px;color:var(--muted);margin-bottom:4px}
+.phone-stat-val{font-size:18px;font-weight:800;color:var(--text)}
+.phone-stat-val.blue{color:var(--blue)}
+.phone-stat-val.red{color:var(--red)}
+.phone-stat-val.green{color:#22c55e}
+.phone-list{background:white;border-radius:12px;padding:10px;border:1px solid var(--border)}
+.phone-list-title{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+.phone-list-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.phone-list-item:last-child{border-bottom:none}
+.phone-list-name{font-size:11px;font-weight:600;color:var(--text)}
+.phone-list-sub{font-size:10px;color:var(--muted)}
+.phone-list-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.badge-dolu{background:rgba(34,197,94,0.1);color:#16a34a}
+.badge-bos{background:rgba(255,128,139,0.1);color:var(--red)}
+.badge-yarim{background:rgba(244,190,94,0.1);color:#d97706}
+
+/* Floating cards */
+.float-card{position:absolute;background:white;border-radius:16px;padding:14px 18px;box-shadow:0 8px 32px rgba(0,0,0,0.12);border:1px solid var(--border);animation:float2 5s ease-in-out infinite}
+.float-card-1{top:10%;left:-60px;animation-delay:0.5s}
+.float-card-2{bottom:15%;right:-50px;animation-delay:1s}
+.float-card-pie{bottom:15%;left:-80px;animation-delay:0.8s;width:200px;z-index:3}
+@keyframes float2{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.float-card-label{font-size:11px;color:var(--muted);margin-bottom:4px}
+.float-card-val{font-size:20px;font-weight:800;color:var(--text)}
+.float-card-change{font-size:11px;font-weight:600;color:#22c55e;margin-top:2px}
+.pie-legend{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);margin-top:5px}
+.pie-legend span{width:9px;height:9px;border-radius:2px;flex-shrink:0;display:inline-block}
+.pie-legend b{color:var(--text);font-weight:600;margin-left:auto}
+
+/* FEATURES */
+.features{padding:110px 48px;background:white}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:0}
+.features-grid-2{grid-template-columns:repeat(2,1fr);max-width:66%;margin:20px auto 0}
+.features .section-sub{margin-bottom:0;margin-top:60px}
+.features .section-title{margin-bottom:24px}
+.feature-card{background:var(--bg);border-radius:22px;padding:36px;border:1px solid var(--border);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);opacity:0;transform:translateY(24px)}
+.feature-card.visible{opacity:1;transform:translateY(0)}
+.feature-card:hover{background:white;border-color:rgba(94,129,244,0.3);box-shadow:0 20px 56px rgba(94,129,244,0.12);transform:translateY(-8px) scale(1.02)}
+.feature-card:hover .feature-icon{transform:scale(1.15) rotate(-4deg)}
+.feature-icon{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:26px;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1)}
+.fi-blue{background:rgba(94,129,244,0.1)}
+.fi-red{background:rgba(255,128,139,0.1)}
+.fi-green{background:rgba(124,231,172,0.12)}
+.fi-amber{background:rgba(244,190,94,0.12)}
+.fi-purple{background:rgba(129,129,165,0.1)}
+.fi-navy{background:rgba(26,26,46,0.06)}
+.feature-title{font-size:22px;font-weight:600;color:var(--text);margin-bottom:12px;letter-spacing:-0.3px}
+.feature-desc{font-size:18px;color:var(--muted);line-height:1.7}
+
+/* COLOR CHIPS */
+.color-chips{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px}
+.chip-green{background:rgba(124,231,172,0.15);color:#15803d}
+.chip-amber{background:rgba(244,190,94,0.15);color:#b45309}
+.chip-red{background:rgba(255,128,139,0.15);color:#dc2626}
+.chip-blue{background:rgba(94,129,244,0.1);color:var(--blue)}
+
+/* SECURITY */
+.security{padding:110px 48px;background:white}
+.security-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px 32px;margin-top:64px}
+.security-item{display:flex;flex-direction:column;align-items:center;text-align:center;opacity:0;transform:translateY(24px);transition:all 0.5s cubic-bezier(0.16,1,0.3,1)}
+.security-item.visible{opacity:1;transform:translateY(0)}
+.security-icon{margin-bottom:24px}
+.security-icon img{display:block}
+.security-title{font-size:22px;font-weight:600;color:var(--navy);line-height:1.3;letter-spacing:-0.3px;margin-bottom:12px}
+.security-desc{font-size:18px;color:var(--muted);line-height:1.6;max-width:260px}
+@media(max-width:1000px){.security-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.security-grid{grid-template-columns:1fr}}
+
+/* HOW TO */
+.howto{padding:110px 48px 130px;background:transparent}
+.howto-steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:80px}
+.howto-line{position:absolute;top:36px;left:calc(12.5% + 8px);right:calc(12.5% + 8px);height:1px;background:linear-gradient(90deg,rgba(94,129,244,0.4),rgba(94,129,244,0.7),rgba(94,129,244,0.4));z-index:0}
+.howto-step{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1}
+.howto-num{width:72px;height:72px;border-radius:50%;border:2px solid rgba(94,129,244,0.6);background:#0d0d22;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#7B9BFF;margin-bottom:28px;position:relative;z-index:1}
+.howto-step-title{font-size:20px;font-weight:700;color:white;margin-bottom:12px;letter-spacing:-0.3px}
+.howto-step-desc{font-size:16px;color:rgba(255,255,255,0.5);line-height:1.6;max-width:220px}
+@media(max-width:768px){
+  .howto-steps{grid-template-columns:repeat(2,1fr)}
+  .howto-line{display:none}
+}
+.dark-section-wrap{background:linear-gradient(180deg,#0a0a1a 0%,#111130 40%,#0d0d22 70%,#0a0a1a 100%);position:relative;padding-bottom:80px}
+
+/* ROLES */
+.roles{padding:110px 48px 80px;background:transparent;position:relative;overflow:hidden}
+.roles-glow{position:absolute;top:-300px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(94,129,244,0.12) 0%,transparent 70%);border-radius:50%;pointer-events:none}
+.roles .section-tag{background:rgba(94,129,244,0.18);color:#a5b4fc}
+.roles .section-title{color:white}
+.roles .section-sub{font-size:18px;color:rgba(255,255,255,0.52);font-weight:300;line-height:1.7;max-width:580px;margin:16px auto 52px}
+.roles-carousel-wrap{position:relative}
+.roles-grid{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:none;margin-top:0}
+.roles-grid::-webkit-scrollbar{display:none}
+.roles-grid .role-card{flex:0 0 320px;scroll-snap-align:start}
+.role-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:22px;padding:30px;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);opacity:0;transform:translateY(20px);text-align:center}
+.role-card.visible{opacity:1;transform:translateY(0)}
+.role-card:hover{background:rgba(255,255,255,0.07);border-color:rgba(94,129,244,0.35);transform:translateY(-3px)}
+.role-header{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:16px}
+.role-icon{width:64px;height:64px;border-radius:14px;background:rgba(94,129,244,0.18);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
+.role-name{font-size:19px;font-weight:700;color:white;line-height:1.3}
+.role-desc{font-size:15px;color:rgba(255,255,255,0.52);line-height:1.7}
+.role-perms{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;justify-content:center}
+.role-perm{font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;background:rgba(94,129,244,0.15);color:#a5b4fc}
+.role-perm.green{background:rgba(34,197,94,0.15);color:#4ade80}
+.role-perm.yellow{background:rgba(234,179,8,0.15);color:#fbbf24}
+/* Carousel butonları */
+.carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;z-index:10;font-size:18px}
+.carousel-btn:hover{background:rgba(94,129,244,0.3);border-color:rgba(94,129,244,0.5);color:white}
+.carousel-btn.prev{left:-22px}
+.carousel-btn.next{right:-22px}
+
+/* STATS BAND */
+.stats-band{padding:60px 48px;background:transparent;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06)}
+.stats-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center}
+.stat-num{font-family:'Sora',sans-serif;font-size:52px;font-weight:700;color:white;margin-bottom:10px;letter-spacing:-1px}
+.stat-label{font-size:16px;color:rgba(255,255,255,0.6);font-weight:400}
+
+/* REPORTS */
+.reports{padding:110px 48px;background:transparent}
+.reports-inner{max-width:1240px;margin:0 auto}
+.reports-top{text-align:center;margin-bottom:60px}
+.reports .section-tag{background:rgba(94,129,244,0.18);color:#a5b4fc}
+.reports .section-title{color:white}
+.reports .section-sub{color:rgba(255,255,255,0.55);max-width:560px;margin:0 auto}
+.reports-bottom{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.reports-list{list-style:none;display:flex;flex-direction:column;gap:16px}
+.reports-list li{display:flex;align-items:center;gap:14px;font-size:18px;color:rgba(255,255,255,0.8)}
+.reports-list-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.reports-phone-wrap{display:flex;justify-content:center;align-items:center;position:relative;min-height:400px}
+/* Dark phone mockup */
+.rp-mockup{width:280px;background:#0f0f1a;border-radius:36px;border:2px solid rgba(255,255,255,0.12);padding:16px;box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.04),inset 0 1px 0 rgba(255,255,255,0.06);animation:float 4s ease-in-out infinite;position:relative}
+.rp-glow{position:absolute;top:-20px;left:50%;transform:translateX(-50%);width:200px;height:200px;background:radial-gradient(circle,rgba(94,129,244,0.2),transparent 70%);border-radius:50%;pointer-events:none}
+.rp-screen{background:#12122a;border-radius:24px;overflow:hidden;padding:16px}
+.rp-header{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.rp-logo{width:28px;height:28px;background:linear-gradient(135deg,#5E81F4,#7CE7AC);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:white}
+.rp-title{font-size:12px;font-weight:700;color:white}
+.rp-role{font-size:10px;color:#8899bb}
+.rp-card{background:rgba(94,129,244,0.15);border:1px solid rgba(94,129,244,0.25);border-radius:12px;padding:12px;margin-bottom:10px}
+.rp-card-label{font-size:10px;color:#8899bb;margin-bottom:4px}
+.rp-card-val{font-size:20px;font-weight:800;color:white}
+.rp-mini-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.rp-mini{background:rgba(255,255,255,0.05);border-radius:8px;padding:8px}
+.rp-mini-label{font-size:9px;color:#8899bb}
+.rp-mini-val{font-size:14px;font-weight:700;color:white;margin-top:2px}
+.rp-chart{display:flex;align-items:flex-end;gap:4px;height:50px;padding:4px 0}
+.rp-bar{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,#5E81F4,rgba(94,129,244,0.3));animation:barGrow 2s ease-in-out infinite alternate;transform-origin:bottom}
+@keyframes barGrow{from{opacity:0.6;transform:scaleY(0.82)}to{opacity:1;transform:scaleY(1)}}
+.report-title-text{font-size:16px;font-weight:600;color:var(--text)}
+.report-period{font-size:13px;color:var(--muted);background:var(--bg);padding:5px 12px;border-radius:20px}
+.chart-wrap{display:flex;align-items:flex-end;gap:7px;height:130px;margin-bottom:8px}
+.chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.chart-bar{width:100%;border-radius:6px 6px 0 0;transition:height 0.7s cubic-bezier(0.16,1,0.3,1)}
+.chart-bar.active{background:var(--blue)}
+.chart-bar.inactive{background:rgba(94,129,244,0.18)}
+.chart-label{font-size:10px;color:var(--muted)}
+.report-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.report-stat{text-align:center;background:var(--bg);border-radius:14px;padding:14px 10px}
+.report-stat-val{font-size:20px;font-weight:700;font-family:'Sora',sans-serif}
+.report-stat-label{font-size:12px;color:var(--muted);margin-top:3px}
+
+/* WHY US */
+.why{padding:20px 48px 200px;background:transparent;position:relative;overflow:hidden;margin-top:0}
+.why-blob1{position:absolute;top:-100px;right:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(94,129,244,0.1) 0%,transparent 65%);border-radius:50%;pointer-events:none;animation:blobmove1 8s ease-in-out infinite}
+.why-blob2{position:absolute;bottom:-80px;left:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,128,139,0.08) 0%,transparent 65%);border-radius:50%;pointer-events:none;animation:blobmove2 10s ease-in-out infinite}
+.why-blob3{position:absolute;top:40%;left:35%;width:350px;height:350px;background:radial-gradient(circle,rgba(124,231,172,0.07) 0%,transparent 65%);border-radius:50%;pointer-events:none;animation:blobmove3 12s ease-in-out infinite}
+.why-blob4{position:absolute;top:20%;right:25%;width:300px;height:300px;background:radial-gradient(circle,rgba(244,190,94,0.07) 0%,transparent 65%);border-radius:50%;pointer-events:none;animation:blobmove1 9s ease-in-out 2s infinite}
+@keyframes blobmove1{0%,100%{transform:translate(0,0)}33%{transform:translate(30px,-40px)}66%{transform:translate(-20px,20px)}}
+@keyframes blobmove2{0%,100%{transform:translate(0,0)}33%{transform:translate(-40px,30px)}66%{transform:translate(25px,-25px)}}
+@keyframes blobmove3{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}}
+.why .section-tag{background:rgba(94,129,244,0.07);color:var(--blue)}
+.why .section-title{color:var(--navy)}
+.why-cards-wrap{position:relative;min-height:680px;margin-top:70px}
+.why-glass-card{position:absolute;background:rgba(255,255,255,0.52);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.85);border-radius:22px;padding:36px;box-shadow:0 8px 40px rgba(94,129,244,0.1),0 2px 8px rgba(0,0,0,0.04);transition:box-shadow 0.4s,opacity 0.6s,transform 0.6s cubic-bezier(0.16,1,0.3,1);width:320px;opacity:0;transform:translateY(32px)}
+.why-glass-card.visible{opacity:1;transform:translateY(0)}
+.why-glass-card.visible.wc1{animation:wfloat1 5s ease-in-out 0.6s infinite}
+.why-glass-card.visible.wc2{animation:wfloat2 5s ease-in-out 1.4s infinite}
+.why-glass-card.visible.wc3{animation:wfloat3 5s ease-in-out 0.9s infinite}
+.why-glass-card.visible.wc4{animation:wfloat2 5s ease-in-out 1.8s infinite}
+.why-glass-card.visible.wc5{animation:wfloat1 5s ease-in-out 0.4s infinite}
+.why-glass-card.visible.wc6{animation:wfloat3 5s ease-in-out 1.2s infinite}
+@keyframes wfloat1{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes wfloat2{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes wfloat3{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.why-glass-card:hover{box-shadow:0 20px 56px rgba(94,129,244,0.16),0 4px 12px rgba(0,0,0,0.06)}
+.why-glass-card::before{content:"";position:absolute;inset:0;border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,0.6) 0%,rgba(255,255,255,0.1) 100%);pointer-events:none}
+.why-card-icon{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:24px;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1)}
+.why-glass-card:hover .why-card-icon{transform:scale(1.15) rotate(-4deg)}
+.why-card-icon.ic-blue{background:rgba(94,129,244,0.1)}
+.why-card-icon.ic-green{background:rgba(124,231,172,0.12)}
+.why-card-icon.ic-amber{background:rgba(244,190,94,0.12)}
+.why-card-icon.ic-red{background:rgba(255,128,139,0.1)}
+.why-card-icon.ic-purple{background:rgba(129,129,165,0.1)}
+.why-card-icon.ic-navy{background:rgba(26,26,46,0.06)}
+.why-card-title{font-size:22px;font-weight:600;color:#1a1a2e;margin-bottom:12px;letter-spacing:-0.3px;line-height:1.2}
+.why-card-desc{font-size:18px;color:#444;line-height:1.45}
+.why-card-glow{position:absolute;width:100px;height:100px;border-radius:50%;filter:blur(36px);pointer-events:none;opacity:0.35;top:-10px;right:-10px}
+@media(max-width:1000px){
+  .why-cards-wrap{min-height:auto;display:flex;flex-direction:column;gap:18px}
+  .why-glass-card{position:static !important;width:100% !important;opacity:1 !important;animation:none !important;transform:none !important}
+  .why-glass-card:hover{transform:translateY(-4px) !important}
+}
+
+/* PRICING */
+.pricing{padding:110px 48px;background:var(--bg);margin-top:0}
+.pricing-card{border-radius:24px;padding:48px 40px;background:white;border:1px solid var(--border);transition:all 0.3s;position:relative}
+
+/* CONTACT */
+.contact{padding:110px 48px;background:var(--bg)}
+.contact-inner{max-width:1240px;margin:0 auto}
+.contact-top{text-align:center;margin-bottom:60px}
+.contact-top .section-tag{display:inline-block}
+.contact-top .section-title{color:var(--navy);text-align:center}
+.contact-form-wide{background:white;border-radius:24px;padding:48px;border:1px solid var(--border);max-width:860px;margin:0 auto;box-shadow:0 8px 40px rgba(0,0,0,0.06)}
+.contact-form-title{font-size:22px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.contact-form-sub{font-size:15px;color:var(--muted);margin-bottom:32px}
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.3px}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-size:15px;color:var(--text);font-family:inherit;transition:all 0.2s;outline:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(94,129,244,0.1)}
+.form-textarea{resize:vertical;min-height:100px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.form-submit{width:100%;padding:16px;background:var(--blue);color:white;border:none;border-radius:10px;font-size:17px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:8px;font-family:inherit}
+.form-submit:hover{background:var(--blue-dark);transform:translateY(-1px);box-shadow:0 8px 24px rgba(94,129,244,0.3)}
+.form-success{display:none;text-align:center;padding:48px}
+.form-success-icon{font-size:56px;margin-bottom:16px}
+.form-success h3{color:var(--navy);font-size:24px;margin-bottom:10px}
+.form-success p{color:var(--muted);font-size:17px}
+/* Güven badge'leri */
+.trust-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:32px}
+.trust-badge{display:flex;align-items:center;gap:7px;background:transparent;color:#1a1a2e;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1.5px solid #D6D8E0}
+/* İletişim bilgileri */
+.contact-links{display:flex;justify-content:center;gap:32px;margin-top:28px;flex-wrap:wrap}
+.contact-link{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--muted);text-decoration:none;transition:color 0.2s}
+.contact-link:hover{color:var(--navy)}
+
+/* FAQ */
+.faq{padding:110px 48px;background:var(--bg)}
+.faq-list{max-width:900px;margin:48px auto 0}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-question{width:100%;background:none;border:none;padding:24px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:var(--navy);font-size:22px;font-weight:600;text-align:left;gap:16px;font-family:inherit;line-height:1.3}
+.faq-icon{width:36px;height:36px;min-width:36px;border:1.5px solid var(--muted);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s;position:relative}
+.faq-icon::before{content:'';position:absolute;width:14px;height:2px;background:var(--muted);border-radius:2px;transition:all 0.3s}
+.faq-icon::after{content:'';position:absolute;width:2px;height:14px;background:var(--muted);border-radius:2px;transition:all 0.3s}
+.faq-item.open .faq-icon{border-color:var(--blue);transform:rotate(45deg)}
+.faq-item.open .faq-icon::before{background:var(--blue)}
+.faq-item.open .faq-icon::after{background:var(--blue)}
+.faq-answer{overflow:hidden;max-height:0;transition:max-height 0.3s ease}
+.faq-answer-inner{padding:0 0 24px;color:var(--muted);font-size:18px;line-height:1.7;max-width:820px}
+
+/* WHATSAPP FAB + UP */
+.whatsapp-fab{position:fixed;bottom:28px;right:28px;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.4);z-index:99;transition:transform 0.2s}
+.whatsapp-fab:hover{transform:scale(1.1)}
+.up-btn{position:fixed;bottom:96px;right:28px;width:44px;height:44px;background:white;border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.1);z-index:99;transition:all 0.2s;opacity:0;pointer-events:none}
+.up-btn.visible{opacity:1;pointer-events:auto}
+.up-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px)}
+.up-btn:hover svg{stroke:white}
+.up-btn svg{stroke:var(--navy);transition:stroke 0.2s}
+.pricing-toggle{display:flex;align-items:center;justify-content:center;gap:14px;margin:32px 0 48px}
+.toggle-label{font-size:15px;font-weight:500;color:var(--muted);transition:color 0.2s}
+.toggle-label.active{color:var(--navy);font-weight:600}
+.toggle-switch{width:52px;height:28px;background:var(--blue);border-radius:14px;position:relative;cursor:pointer;border:none;transition:background 0.3s;flex-shrink:0}
+.toggle-switch::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;background:white;border-radius:50%;transition:transform 0.3s}
+.toggle-switch.yearly::after{transform:translateX(24px)}
+.save-badge{background:rgba(124,231,172,0.15);border:1px solid rgba(124,231,172,0.4);color:#15803d;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px}
+.pricing-card{border-radius:24px;padding:40px;background:white;border:1px solid var(--border);transition:all 0.3s;position:relative}
+.pricing-card.featured{border-color:var(--blue);box-shadow:0 20px 60px rgba(94,129,244,0.15)}
+.featured-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--blue);color:white;font-size:12px;font-weight:700;padding:5px 18px;border-radius:100px;white-space:nowrap;letter-spacing:0.3px}
+.pricing-name{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:14px}
+.pricing-price{font-family:'Sora',sans-serif;font-size:42px;font-weight:700;color:var(--navy);margin-bottom:6px;letter-spacing:-1px;line-height:1}
+.pricing-price .price-val{font-size:42px;font-weight:700;color:var(--navy)}
+.pricing-price .price-per{font-size:18px;font-weight:400;color:var(--muted)}
+.pricing-desc{font-size:17px;color:var(--muted);margin-bottom:32px;line-height:1.65}
+.pricing-features{list-style:none;margin-bottom:36px;display:flex;flex-direction:column;gap:2px}
+.pricing-features li{font-size:17px;color:var(--text);padding:9px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.pricing-features li:last-child{border-bottom:none}
+.pf-check{color:var(--blue);font-weight:700;flex-shrink:0;font-size:16px}
+.pricing-btn{display:block;text-align:center;padding:15px;border-radius:12px;font-weight:600;font-size:15px;text-decoration:none;transition:all 0.2s;letter-spacing:0.1px}
+.pb-primary{background:var(--blue);color:white}
+.pb-primary:hover{background:var(--blue-dark);transform:translateY(-1px)}
+.pb-outline{background:transparent;color:var(--blue);border:2px solid var(--blue)}
+.pb-outline:hover{background:var(--blue);color:white}
+
+/* CTA */
+.cta{padding:100px 48px;background:var(--navy);text-align:center;position:relative;overflow:hidden}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(94,129,244,0.18) 0%,transparent 70%);pointer-events:none}
+.cta h2{font-family:'Sora',sans-serif;font-size:52px;font-weight:600;color:white;margin-bottom:20px;position:relative;letter-spacing:-1px;line-height:1.1}
+.cta h2 em{color:var(--blue);font-style:normal}
+.cta p{font-size:19px;font-weight:400;color:rgba(255,255,255,0.55);margin-bottom:44px;position:relative}
+.cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative}
+.btn-white{background:white;color:var(--navy);padding:16px 40px;border-radius:12px;text-decoration:none;font-weight:600;font-size:16px;transition:all 0.25s;letter-spacing:0.1px}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,255,255,0.15)}
+.btn-outline-white{background:transparent;color:white;padding:16px 40px;border-radius:12px;text-decoration:none;font-weight:600;font-size:16px;border:2px solid rgba(255,255,255,0.2);transition:all 0.25s}
+.btn-outline-white:hover{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.06)}
+
+/* FOOTER */
+footer{background:#0a0a1a;padding:48px 48px 32px;border-top:1px solid rgba(255,255,255,0.06)}
+.footer-inner{max-width:1240px;margin:0 auto}
+.footer-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:24px}
+.footer-links{display:flex;gap:28px;flex-wrap:wrap}
+.footer-links a{color:rgba(255,255,255,0.45);text-decoration:none;font-size:14px;transition:color 0.2s}
+.footer-links a:hover{color:white}
+.footer-divider{height:1px;background:rgba(255,255,255,0.06);margin-bottom:24px}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-contact{display:flex;gap:24px;flex-wrap:wrap}
+.footer-contact-item{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.45);text-decoration:none;font-size:14px;transition:color 0.2s}
+.footer-contact-item:hover{color:white}
+.footer-contact-item svg{display:inline-block;flex-shrink:0}
+.footer-copy{font-size:13px;color:rgba(255,255,255,0.28)}
+.footer-copy a{color:rgba(255,255,255,0.4);text-decoration:none}
+.footer-copy a:hover{color:white}
+
+/* ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(36px);transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1),transform 0.7s cubic-bezier(0.16,1,0.3,1)}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* SCROLL PROGRESS */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;background:var(--blue);z-index:200;transition:width 0.1s linear;width:0%}
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .roles-grid .role-card{flex:0 0 calc((100% - 18px)/2)}
+  .stats-inner{grid-template-columns:1fr 1fr}
+  .reports-inner{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr}
+  nav{padding:16px 24px}
+  .nav-links{display:none}
+  .hero,.features,.roles,.reports,.pricing,.cta,.why,.stats-band{padding-left:24px;padding-right:24px}
+  .hero h1{font-size:42px}
+  .section-title{font-size:34px}
+  .cta h2{font-size:36px}
+}
+@media(max-width:640px){
+  .features-grid{grid-template-columns:1fr}
+  .features-grid-2{grid-template-columns:1fr;max-width:100%}
+  .roles-grid .role-card{flex:0 0 85%}
+  .stats-inner{grid-template-columns:1fr 1fr;gap:24px}
+  .hero-stats{gap:24px}
+  .hero-stat-num{font-size:26px}
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="header-logo.svg" alt="Hayrat Takip" style="height:38px;width:auto;position:relative;top:-4px">
+  </div>
+  <ul class="nav-links">
+    <li><a href="#ozellikler">Özellikler</a></li>
+    <li><a href="#nasil-calisir">Nasıl Çalışır</a></li>
+    <li><a href="#fiyatlandirma">Fiyatlar</a></li>
+    <li><a href="#sss">SSS</a></li>
+  </ul>
+  <div style="display:flex;gap:12px;align-items:center">
+    <a href="https://demokumbara.mediacraft.tr" target="_blank" class="nav-ghost">Demo İncele</a>
+    <a href="#iletisim" class="nav-cta">Teklif Al</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blob1"></div>
+  <div class="hero-blob2"></div>
+  <div class="hero-inner">
+    <div class="hero-content fade-up">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Yeni Nesil Hayrat Yönetimi
+      </div>
+      <h1>Hayrat Takibini <strong><em>Dijitale</em> Taşı</strong></h1>
+      <p class="hero-sub" style="font-size:24px;font-weight:200;color:#000000;line-height:1.4875">Bağış, aidat, kasa, kumbara ve şube süreçlerinizi tek merkezden yönetin. Hayrat faaliyetlerinizi kayıt altına alın, arşivleyin ve detaylı raporlayın.</p>
+      <div class="hero-btns">
+        <a href="#iletisim" class="btn-primary">Ücretsiz Demo Al</a>
+        <a href="https://demokumbara.mediacraft.tr" target="_blank" class="btn-secondary">Sistemi İncele →</a>
+      </div>
+      <div class="hero-stats" style="display:flex; gap:32px; margin-top:32px;">
+        <div>
+          <div style="font-size:34px; font-weight:800; color:var(--navy);">5</div>
+          <div style="font-size:13px; color:var(--muted); margin-top:2px;">Kullanıcı Rolü</div>
+        </div>
+        <div>
+          <div style="font-size:34px; font-weight:800; color:var(--navy);">GPS</div>
+          <div style="font-size:13px; color:var(--muted); margin-top:2px;">Konum Takibi</div>
+        </div>
+        <div>
+          <div style="font-size:34px; font-weight:800; color:var(--navy);">%99</div>
+          <div style="font-size:13px; color:var(--muted); margin-top:2px;">Uptime SLA</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="float-card float-card-1">
+        <div class="float-card-label">Bugünkü Toplama</div>
+        <div class="float-card-val">₺4.280</div>
+        <div class="float-card-change">↑ %18 artış</div>
+      </div>
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-header">
+            <span class="phone-header-title">📊 Saha Sorumlusu</span>
+            <span class="phone-header-badge">CANLI</span>
+          </div>
+          <div class="phone-body">
+            <div class="phone-stat-row">
+              <div class="phone-stat">
+                <div class="phone-stat-label">Toplam Kumbara</div>
+                <div class="phone-stat-val blue">142</div>
+              </div>
+              <div class="phone-stat">
+                <div class="phone-stat-label">Dolu Kumbara</div>
+                <div class="phone-stat-val green">38</div>
+              </div>
+            </div>
+            <div class="phone-stat-row">
+              <div class="phone-stat">
+                <div class="phone-stat-label">Bu Ay Gelir</div>
+                <div class="phone-stat-val" style="font-size:14px">₺28.450</div>
+              </div>
+              <div class="phone-stat">
+                <div class="phone-stat-label">Geciken</div>
+                <div class="phone-stat-val red">7</div>
+              </div>
+            </div>
+            <div class="phone-list">
+              <div class="phone-list-title">Son Açılan Kumbaralar</div>
+              <div class="phone-list-item">
+                <div><div class="phone-list-name">Elif Pastanesi</div><div class="phone-list-sub">Fatih Şubesi · 2 saat önce</div></div>
+                <span class="phone-list-badge badge-dolu">₺420</span>
+              </div>
+              <div class="phone-list-item">
+                <div><div class="phone-list-name">Marmara Market</div><div class="phone-list-sub">Kadıköy Şubesi · Dün</div></div>
+                <span class="phone-list-badge badge-dolu">₺185</span>
+              </div>
+              <div class="phone-list-item">
+                <div><div class="phone-list-name">Güneş Fırını</div><div class="phone-list-sub">Beşiktaş Şubesi · 3 gün</div></div>
+                <span class="phone-list-badge badge-yarim">Yarım</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="float-card float-card-2">
+        <div class="float-card-label">Aktif Saha Görevlisi</div>
+        <div class="float-card-val">8</div>
+        <div class="float-card-change">3 şubede aktif</div>
+      </div>
+      <div class="float-card float-card-pie">
+        <div class="float-card-label">Bölge Dağılımı</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+          <canvas id="hdPie" width="64" height="64" style="flex-shrink:0"></canvas>
+          <div>
+            <div class="pie-legend"><span style="background:#5E81F4"></span>Fatih <b>41%</b></div>
+            <div class="pie-legend"><span style="background:#7CE7AC"></span>Kadıköy <b>30%</b></div>
+            <div class="pie-legend"><span style="background:#F4BE5E"></span>Beşiktaş <b>19%</b></div>
+            <div class="pie-legend"><span style="background:#FF808B"></span>Diğer <b>10%</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why" id="neden">
+  <div class="why-blob1"></div>
+  <div class="why-blob2"></div>
+  <div class="why-blob3"></div>
+  <div class="why-blob4"></div>
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center">
+      <span class="section-tag">NEDEN HAYRAT TAKİP?</span>
+      <h2 class="section-title">Hayrat Yönetimi İçin Geliştirildi</h2>
+      <p style="font-size:24px;font-weight:300;color:#000000;line-height:1.4875;max-width:500px;margin:12px auto 0;text-align:center">Dağınık kayıtlar ve manuel süreçler yerine<br>tüm faaliyetlerinizi tek sistemde yönetin.</p>
+    </div>
+    <div class="why-cards-wrap">
+
+      <!-- GRUP 1 - SOL -->
+      <!-- Kart 1a: üst, solda -->
+      <div class="why-glass-card fade-up wc1" style="left:0;top:0;transition-delay:0.05s">
+        <div class="why-card-glow" style="background:#5E81F4"></div>
+        <div class="why-card-icon ic-blue">🗂️</div>
+        <div class="why-card-title">Tüm Kayıtlar Tek Merkezde</div>
+        <div class="why-card-desc">Bağış, aidat, kasa, kumbara ve şube kayıtlarını tek platform üzerinden yönetin.</div>
+      </div>
+      <!-- Kart 1b: alt, 40px sağa offset -->
+      <div class="why-glass-card fade-up wc2" style="left:40px;top:310px;transition-delay:0.2s">
+        <div class="why-card-glow" style="background:#FF808B"></div>
+        <div class="why-card-icon ic-red">🏛️</div>
+        <div class="why-card-title">Kurumsal Hafıza Oluşturun</div>
+        <div class="why-card-desc">Defterler ve Excel dosyaları yerine tüm kayıtlarınızı güvenle arşivleyin ve erişin.</div>
+      </div>
+
+      <!-- GRUP 2 - ORTA (60px aşağıdan başlar) -->
+      <!-- Kart 2a: üst, solda -->
+      <div class="why-glass-card fade-up wc3" style="left:calc(50% - 160px);top:60px;transition-delay:0.15s">
+        <div class="why-card-glow" style="background:#7CE7AC"></div>
+        <div class="why-card-icon ic-green">✅</div>
+        <div class="why-card-title">Şeffaf ve Güvenilir Süreçler</div>
+        <div class="why-card-desc">Şahitli sayım, işlem geçmişi ve yetkilendirmeler ile tüm süreçleri kayıt altında tutun.</div>
+      </div>
+      <!-- Kart 2b: alt, 40px sağa offset -->
+      <div class="why-glass-card fade-up wc4" style="left:calc(50% - 120px);top:370px;transition-delay:0.35s">
+        <div class="why-card-glow" style="background:#8181A5"></div>
+        <div class="why-card-icon ic-purple">🌐</div>
+        <div class="why-card-title">Her Yerden Erişim</div>
+        <div class="why-card-desc">Merkez, şube ve saha ekipleri aynı sistem üzerinden eş zamanlı çalışsın.</div>
+      </div>
+
+      <!-- GRUP 3 - SAĞ -->
+      <!-- Kart 3a: üst, solda -->
+      <div class="why-glass-card fade-up wc5" style="right:40px;top:20px;transition-delay:0.25s">
+        <div class="why-card-glow" style="background:#F4BE5E"></div>
+        <div class="why-card-icon ic-amber">📊</div>
+        <div class="why-card-title">Güçlü Raporlama</div>
+        <div class="why-card-desc">Gelirleri, dağılımları ve performans verilerini anlık raporlarla analiz edin.</div>
+      </div>
+      <!-- Kart 3b: alt, sağa hizalı (offset sol'a) -->
+      <div class="why-glass-card fade-up wc6" style="right:0;top:330px;transition-delay:0.45s">
+        <div class="why-card-glow" style="background:#5E81F4"></div>
+        <div class="why-card-icon ic-navy">🏗️</div>
+        <div class="why-card-title">Gerçek Saha Deneyimiyle</div>
+        <div class="why-card-desc">Hayrat ekiplerinin ihtiyaçları doğrultusunda tasarlandı ve sahada test edildi.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="ozellikler">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center">
+      <span class="section-tag">ÖZELLİKLER</span>
+      <h2 class="section-title"><em>Hayrat Yönetiminde</em> Yeni Standart</h2>
+      <p class="section-sub" style="max-width:600px;margin:0 auto 48px;text-align:center;font-size:24px;font-weight:300;color:var(--navy);line-height:1.4875">Saha görevlisinden merkez başkanına kadar<br>tüm süreçleri kapsayan eksiksiz bir yönetim platformu.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-blue">📍</div>
+        <div class="feature-title">GPS Konum Takibi</div>
+        <div class="feature-desc">Her kumbara için anlık GPS koordinatı, otomatik adres tespiti ve harita üzerinde görselleştirme.</div>
+        <div class="color-chips"><span class="chip chip-green">Hassas</span><span class="chip chip-blue">Otomatik</span></div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-green">💰</div>
+        <div class="feature-title">Kasa ve Cari Takip</div>
+        <div class="feature-desc">Şube bazlı gelir-gider, cari hesap ve borç-alacak yönetimi.</div>
+        <div class="color-chips"><span class="chip chip-green">Şeffaf</span><span class="chip chip-blue">Şube Bazlı</span></div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-amber">📊</div>
+        <div class="feature-title">Detaylı Raporlama</div>
+        <div class="feature-desc">Bölgesel analizler, performans ölçümleri ve Excel çıktıları.</div>
+        <div class="color-chips"><span class="chip chip-amber">Excel</span><span class="chip chip-blue">Grafikler</span></div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-navy">📱</div>
+        <div class="feature-title">Mobil Erişim</div>
+        <div class="feature-desc">Telefon, tablet ve bilgisayardan kesintisiz kullanım.</div>
+        <div class="color-chips"><span class="chip chip-green">Mobil</span><span class="chip chip-blue">Hızlı Kurulum</span></div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-purple">🔢</div>
+        <div class="feature-title">Kumbara Geçmişi Takibi</div>
+        <div class="feature-desc">Aynı noktadaki tüm kumbara değişimlerini ve geçmiş kayıtları saklayın.</div>
+        <div class="color-chips"><span class="chip chip-blue">Otomatik</span><span class="chip chip-green">Versiyon Takibi</span></div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-red">✅</div>
+        <div class="feature-title">Şahitli Sayım</div>
+        <div class="feature-desc">Sayım işlemlerini kayıt altına alın ve kurumsal şeffaflığı artırın.</div>
+        <div class="color-chips"><span class="chip chip-green">Şeffaf</span><span class="chip chip-blue">Resmi Sayım</span></div>
+      </div>
+    </div>
+    <div class="features-grid features-grid-2">
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-red">⏰</div>
+        <div class="feature-title">Gecikme Uyarıları</div>
+        <div class="feature-desc">Uzun süre ziyaret edilmeyen kumbaraları anında tespit edin.</div>
+        <div class="color-chips"><span class="chip chip-blue">Otomatik</span></div>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-purple">👥</div>
+        <div class="feature-title">Rol Bazlı Yetkilendirme</div>
+        <div class="feature-desc">Merkez, şube ve saha ekipleri için farklı erişim seviyeleri oluşturun.</div>
+        <div class="color-chips"><span class="chip chip-blue">5 Rol</span></div>
+      </div>
+    </div>
+    <p class="section-sub fade-up" style="margin:48px auto 0;max-width:600px;text-align:center;font-size:24px;font-weight:300;color:var(--navy);line-height:1.4875">Saha görevlisinden merkez başkanına her rol için özel araçlar. Tek platform, tam kontrol.</p>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="security" id="guvenlik">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center">
+      <span class="section-tag">GÜVENLİK VE VERİ KONTROLÜ</span>
+      <h2 class="section-title">Verileriniz <em>Kontrolünüz</em> Altında</h2>
+      <p style="font-size:24px;font-weight:300;color:#000;line-height:1.4875;max-width:520px;margin:0 auto 0;text-align:center">Verileriniz yalnızca yetkili kullanıcılar tarafından görüntülenebilir,<br>tamamen sizin kontrolünüzde kalır.</p>
+    </div>
+    <div class="security-grid">
+
+      <div class="security-item fade-up">
+        <div class="security-icon"><img src="security.svg" alt="Erişim" width="51" height="49"></div>
+        <div class="security-title">Kurumunuza Özel<br>Erişim</div>
+        <div class="security-desc">Her kullanıcı yalnızca kendi görev alanıyla ilgili verilere erişebilir.</div>
+      </div>
+
+      <div class="security-item fade-up">
+        <div class="security-icon"><img src="lock.svg" alt="Şifreleme" width="51" height="49"></div>
+        <div class="security-title">Şifrelenmiş Veri<br>İletişimi</div>
+        <div class="security-desc">Verileriniz güvenli bağlantılar ve modern şifreleme teknolojileriyle korunur.</div>
+      </div>
+
+      <div class="security-item fade-up">
+        <div class="security-icon"><img src="cloud.svg" alt="Bulut" width="51" height="49"></div>
+        <div class="security-title">Güvenli Bulut<br>Altyapısı</div>
+        <div class="security-desc">Verileriniz güvenilir bulut altyapısında saklanır, düzenli olarak yedeklenir.</div>
+      </div>
+
+      <div class="security-item fade-up">
+        <div class="security-icon"><img src="data.svg" alt="Sahiplik" width="51" height="49"></div>
+        <div class="security-title">Veri Sahipliği<br>Sizde</div>
+        <div class="security-desc">Kayıtlarınız yalnızca kurumunuza özeldir ve daima sizin kontrolünüzde kalır.</div>
+      </div>
+
+      <div class="security-item fade-up">
+        <div class="security-icon"><img src="infinity.svg" alt="Süreklilik" width="51" height="49"></div>
+        <div class="security-title">Yönetimler Değişir,<br>Kayıtlar Kalır</div>
+        <div class="security-desc">Tüm kayıtlarınızı tek merkezde saklayın, geçmiş verilere her zaman erişin.</div>
+      </div>
+
+      <div class="security-item fade-up">
+        <div class="security-icon"><img src="archive.svg" alt="Arşiv" width="51" height="49"></div>
+        <div class="security-title">Kurumsal Hafızanızı<br>Koruyun</div>
+        <div class="security-desc">Geçmiş işlemler ve kayıtlar güvenle saklanır, ihtiyaç duyduğunuzda erişilebilir.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DARK SECTION WRAP: Roller + Stats + Reports -->
+<div class="dark-section-wrap">
+
+<!-- ROLES -->
+<section class="roles" id="roller">
+  <div class="roles-glow"></div>
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center">
+      <span class="section-tag">KULLANICI ROLLERİ</span>
+      <h2 class="section-title">Herkesin Yetkisi <em>Tam Yerinde</em></h2>
+      <p class="section-sub" style="text-align:center;max-width:680px;margin:0 auto 62px;font-size:24px;font-weight:300;line-height:1.4875">5 farklı rol seviyesiyle organizasyon hiyerarşinize tam uyum.<br>Her kullanıcı yalnızca kendi yetkisindeki verilere erişir.</p>
+    </div>
+    <div class="roles-carousel-wrap">
+      <button class="carousel-btn prev" onclick="scrollRoles(-1)">‹</button>
+      <button class="carousel-btn next" onclick="scrollRoles(1)">›</button>
+    <div class="roles-grid fade-up">
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-icon">👑</div>
+          <div class="role-name">Merkez Başkanı</div>
+        </div>
+        <div class="role-desc">Tüm şubeler, tüm kullanıcılar ve tüm mali veriler üzerinde tam kontrol. Raporlar, ayarlar ve kullanıcı yönetimi.</div>
+        <div class="role-perms"><span class="role-perm">Tüm Şubeler</span><span class="role-perm green">Mali Raporlar</span><span class="role-perm yellow">Kullanıcı Yönetimi</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-icon">🗂️</div>
+          <div class="role-name">İl Merkez Hayrat Koordinatörü</div>
+        </div>
+        <div class="role-desc">Kumbara envanterini yönetir. Teslim alınan kumbaraların şahitli sayımını yapar ve raporları inceler.</div>
+        <div class="role-perms"><span class="role-perm">Kumbara Yönetimi</span><span class="role-perm green">Şahitli Sayım</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-icon">🏦</div>
+          <div class="role-name">Şube Hayrat Sorumlusu</div>
+        </div>
+        <div class="role-desc">Şube bazlı kasa gelir/gider yönetimi, cari hesap ve borç/alacak takibi. Tam mali şeffaflık.</div>
+        <div class="role-perms"><span class="role-perm">Kasa İşlemleri</span><span class="role-perm green">Cari Takip</span><span class="role-perm yellow">Bakiye Listesi</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-icon">📋</div>
+          <div class="role-name">Kumbara Koordinatörü</div>
+        </div>
+        <div class="role-desc">Saha görevlilerini koordine eder. Kumbara istatistiklerini görür ve saha raporlarını inceler.</div>
+        <div class="role-perms"><span class="role-perm">Kumbara Yönetimi</span><span class="role-perm green">Saha Koordinasyonu</span></div>
+      </div>
+      <div class="role-card">
+        <div class="role-header">
+          <div class="role-icon">🧭</div>
+          <div class="role-name">Saha Görevlisi</div>
+        </div>
+        <div class="role-desc">GPS ile kumbara yerleştirme, toplama ve teslim işlemleri. Her işlem otomatik kayıt altında.</div>
+        <div class="role-perms"><span class="role-perm">GPS Konum</span><span class="role-perm green">Kumbara Açma</span><span class="role-perm yellow">Teslim</span></div>
+      </div>
+      <div class="role-card" style="border-color:rgba(94,129,244,0.25);background:rgba(94,129,244,0.05)">
+        <div class="role-header">
+          <div class="role-icon">👁️</div>
+          <div class="role-name">Salt Okunur Erişim</div>
+        </div>
+        <div class="role-desc">Yönetici veya denetçi için tüm verileri görüntüleyebilir ancak değişiklik yapamaz.</div>
+        <div class="role-perms"><span class="role-perm">Salt Okunur</span><span class="role-perm green">Güvenli</span></div>
+      </div>
+    </div><!-- roles-grid -->
+    </div><!-- roles-carousel-wrap -->
+  </div><!-- section-inner -->
+</section>
+
+<!-- STATS BAND -->
+<section class="stats-band">
+  <div class="stats-inner">
+    <div class="fade-up">
+      <div class="stat-num" data-target="980">0</div>
+      <div class="stat-label">Takip Edilen Kumbara</div>
+    </div>
+    <div class="fade-up">
+      <div class="stat-num" data-target="6">0</div>
+      <div class="stat-label">Aktif Şube</div>
+    </div>
+    <div class="fade-up">
+      <div class="stat-num" data-target="360">0</div>
+      <div class="stat-label">Aylık İşlem</div>
+    </div>
+    <div class="fade-up">
+      <div class="stat-num" data-target="100">0</div>
+      <div class="stat-label">% Şeffaf Raporlama</div>
+    </div>
+  </div>
+</section>
+
+<!-- REPORTS -->
+<section class="reports" id="raporlar">
+  <div class="reports-inner">
+    <div class="reports-top fade-up">
+      <span class="section-tag">RAPORLAR</span>
+      <h2 class="section-title">Verilerinizi <em>Anlayın</em></h2>
+      <p class="section-sub">Aylık gelir grafikleri, bölge dağılımı, en verimli kumbaralar ve sorunlu noktalar — hepsi tek ekranda.</p>
+    </div>
+    <div class="reports-bottom">
+      <ul class="reports-list fade-up">
+        <li><div class="reports-list-icon fi-blue">📈</div>Aylık ve yıllık kasa gelir/gider analizi</li>
+        <li><div class="reports-list-icon fi-green">🥧</div>Bölge bazlı gelir dağılımı pasta grafiği</li>
+        <li><div class="reports-list-icon fi-amber">⭐</div>En verimli firmalar sıralaması</li>
+        <li><div class="reports-list-icon fi-red">⚠️</div>Sorunlu ve geciken kumbara bildirimleri</li>
+        <li><div class="reports-list-icon fi-blue">📥</div>Excel'e tek tıkla dışa aktarma</li>
+      </ul>
+      <div class="reports-phone-wrap fade-up">
+        <div class="rp-mockup" style="width:100%;max-width:480px;border-radius:24px;animation:float 4s ease-in-out infinite">
+          <div class="rp-glow"></div>
+          <div class="rp-screen" style="border-radius:16px;padding:24px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+              <span style="font-size:22px;font-weight:700;color:rgba(255,255,255,0.15)">Aylık Gelir Analizi</span>
+              <span style="background:white;color:#1a1a2e;font-size:13px;font-weight:600;padding:6px 16px;border-radius:20px">Bu Yıl</span>
+            </div>
+            <!-- Bar Chart -->
+            <div id="rpChart" style="display:flex;align-items:flex-end;gap:8px;height:140px;margin-bottom:16px">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+                <div class="rp-anim-bar" data-h="91" style="width:100%;background:#5E81F4;border-radius:6px 6px 0 0;height:0px;transition:height 1s cubic-bezier(0.16,1,0.3,1)"></div>
+                <span style="font-size:11px;color:rgba(255,255,255,0.4)">Oca</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+                <div class="rp-anim-bar" data-h="109" style="width:100%;background:#7CE7AC;border-radius:6px 6px 0 0;height:0px;transition:height 1s cubic-bezier(0.16,1,0.3,1) 0.1s"></div>
+                <span style="font-size:11px;color:rgba(255,255,255,0.4)">Şub</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+                <div class="rp-anim-bar" data-h="133" style="width:100%;background:#5E81F4;border-radius:6px 6px 0 0;height:0px;transition:height 1s cubic-bezier(0.16,1,0.3,1) 0.2s"></div>
+                <span style="font-size:11px;color:rgba(255,255,255,0.4)">Mar</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+                <div class="rp-anim-bar" data-h="119" style="width:100%;background:#F4BE5E;border-radius:6px 6px 0 0;height:0px;transition:height 1s cubic-bezier(0.16,1,0.3,1) 0.3s"></div>
+                <span style="font-size:11px;color:rgba(255,255,255,0.4)">Nis</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+                <div class="rp-anim-bar" data-h="101" style="width:100%;background:#7CE7AC;border-radius:6px 6px 0 0;height:0px;transition:height 1s cubic-bezier(0.16,1,0.3,1) 0.4s"></div>
+                <span style="font-size:11px;color:rgba(255,255,255,0.4)">May</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+                <div class="rp-anim-bar" data-h="81" style="width:100%;background:#5E81F4;border-radius:6px 6px 0 0;height:0px;transition:height 1s cubic-bezier(0.16,1,0.3,1) 0.5s"></div>
+                <span style="font-size:11px;color:rgba(255,255,255,0.4)">Haz</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+                <div class="rp-anim-bar" data-h="63" style="width:100%;background:#F4BE5E;border-radius:6px 6px 0 0;height:0px;transition:height 1s cubic-bezier(0.16,1,0.3,1) 0.6s"></div>
+                <span style="font-size:11px;color:rgba(255,255,255,0.4)">Tem</span>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+                <div class="rp-anim-bar" data-h="35" style="width:100%;background:rgba(94,129,244,0.35);border-radius:6px 6px 0 0;height:0px;transition:height 1s cubic-bezier(0.16,1,0.3,1) 0.7s"></div>
+                <span style="font-size:11px;color:rgba(255,255,255,0.4)">Ağu</span>
+              </div>
+            </div>
+            <!-- Stats Row -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+              <div style="background:rgba(255,255,255,0.06);border-radius:14px;padding:16px;text-align:center">
+                <div style="font-size:20px;font-weight:800;color:#5E81F4">₺84.2K</div>
+                <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px">Kasa Gelir</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.06);border-radius:14px;padding:16px;text-align:center">
+                <div style="font-size:20px;font-weight:800;color:#FF808B">₺31.5K</div>
+                <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px">Kasa Gider</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.06);border-radius:14px;padding:16px;text-align:center">
+                <div style="font-size:20px;font-weight:800;color:#7CE7AC">₺52.7K</div>
+                <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px">Net Durum</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NASIL ÇALIŞIR -->
+<section class="howto" id="nasil-calisir">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center">
+      <span class="section-tag" style="background:rgba(94,129,244,0.18);color:#a5b4fc">NASIL ÇALIŞIR</span>
+      <h2 class="section-title" style="color:white">4 Adımda Sisteme Geçiş</h2>
+    </div>
+    <div class="howto-steps fade-up">
+      <div class="howto-line"></div>
+      <div class="howto-step">
+        <div class="howto-num">1</div>
+        <div class="howto-step-title">Teklif Alın</div>
+        <div class="howto-step-desc">Formu doldurun, ihtiyacınıza uygun planı belirleyelim.</div>
+      </div>
+      <div class="howto-step">
+        <div class="howto-num">2</div>
+        <div class="howto-step-title">Sözleşme İmzalayın</div>
+        <div class="howto-step-desc">Dijital veya fiziksel sözleşme ile resmi başlangıç.</div>
+      </div>
+      <div class="howto-step">
+        <div class="howto-num">3</div>
+        <div class="howto-step-title">Kurulum & Eğitim</div>
+        <div class="howto-step-desc">2 saatlik online eğitim, kullanıcı hesapları ve ilk ayar.</div>
+      </div>
+      <div class="howto-step">
+        <div class="howto-num">4</div>
+        <div class="howto-step-title">Yayına Alın</div>
+        <div class="howto-step-desc">Sisteminiz aktif. WhatsApp destek ile yanınızdayız.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /dark-section-wrap -->
+
+<!-- PRICING -->
+<section class="pricing" id="fiyatlandirma">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center">
+      <span class="section-tag">Fiyatlandırma</span>
+      <h2 class="section-title">Organizasyonunuza <em>Uygun</em> Plan</h2>
+      <p class="section-sub" style="margin:0 auto 0">Kurulum ücreti yok. İstediğinizde iptal.</p>
+    </div>
+    <div class="pricing-toggle">
+      <span class="toggle-label active" id="lblAylik">Aylık</span>
+      <button class="toggle-switch" id="priceToggle" onclick="togglePrice()"></button>
+      <span class="toggle-label" id="lblYillik">Yıllık</span>
+      <span class="save-badge" id="saveBadge" style="display:none">🎉 2 ay bedava</span>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card fade-up">
+        <div class="pricing-name">Başlangıç</div>
+        <div class="pricing-price"><span class="price-val" id="p1">₺990</span><span class="price-per" id="p1per">/ay</span></div>
+        <div id="p1save" style="font-size:13px;color:#15803d;font-weight:600;margin-bottom:8px;display:none">Yıllık ₺9.900 — 2 ay ücretsiz</div>
+        <div class="pricing-desc">Küçük ölçekli vakıf ve dernekler için ideal başlangıç paketi.</div>
+        <ul class="pricing-features">
+          <li><span class="pf-check">✓</span>10 kullanıcıya kadar</li>
+          <li><span class="pf-check">✓</span>1 şube</li>
+          <li><span class="pf-check">✓</span>Sınırsız kumbara</li>
+          <li><span class="pf-check">✓</span>Temel raporlar</li>
+          <li><span class="pf-check">✓</span>WhatsApp desteği</li>
+        </ul>
+        <a href="https://wa.me/905355865886" class="pricing-btn pb-outline">Hemen Başla</a>
+      </div>
+      <div class="pricing-card featured fade-up">
+        <div class="featured-badge">En Popüler</div>
+        <div class="pricing-name">Standart</div>
+        <div class="pricing-price"><span class="price-val" id="p2">₺2.490</span><span class="price-per" id="p2per">/ay</span></div>
+        <div id="p2save" style="font-size:13px;color:#15803d;font-weight:600;margin-bottom:8px;display:none">Yıllık ₺24.900 — 2 ay ücretsiz</div>
+        <div class="pricing-desc">Orta ve büyük ölçekli organizasyonlar için tam paket.</div>
+        <ul class="pricing-features">
+          <li><span class="pf-check">✓</span>25 kullanıcıya kadar</li>
+          <li><span class="pf-check">✓</span>5 şubeye kadar</li>
+          <li><span class="pf-check">✓</span>Sınırsız kumbara</li>
+          <li><span class="pf-check">✓</span>Gelişmiş raporlar + Excel</li>
+          <li><span class="pf-check">✓</span>Kasa ve cari yönetimi</li>
+          <li><span class="pf-check">✓</span>Öncelikli destek</li>
+        </ul>
+        <a href="https://wa.me/905355865886" class="pricing-btn pb-primary">Hemen Başla</a>
+      </div>
+      <div class="pricing-card fade-up">
+        <div class="pricing-name">Kurumsal</div>
+        <div class="pricing-price" style="font-size:36px">Teklif<span> alın</span></div>
+        <div class="pricing-desc">Çok şubeli büyük vakıflar için özelleştirilmiş çözüm.</div>
+        <ul class="pricing-features">
+          <li><span class="pf-check">✓</span>Sınırsız kullanıcı</li>
+          <li><span class="pf-check">✓</span>Sınırsız şube</li>
+          <li><span class="pf-check">✓</span>Özel entegrasyonlar</li>
+          <li><span class="pf-check">✓</span>Yerinde kurulum desteği</li>
+          <li><span class="pf-check">✓</span>7/24 destek</li>
+          <li><span class="pf-check">✓</span>Özel SLA taahhütleri</li>
+        </ul>
+        <a href="https://wa.me/905355865886" class="pricing-btn pb-outline">Teklif İste</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="iletisim">
+  <div class="contact-inner">
+    <div class="contact-top fade-up">
+      <span class="section-tag">İLETİŞİM</span>
+      <h2 class="section-title">Hayrat Takip'e Geçmeye <em>Hazır mısınız?</em></h2>
+      <p style="font-size:24px;font-weight:300;color:#000;line-height:1.4875;max-width:520px;margin:0 auto">Formu doldurun, en geç 1 iş günü içinde sizinle iletişime geçelim.</p>
+    </div>
+
+    <div class="contact-form-wide fade-up" id="contactFormWrap">
+      <div id="contactFormContent">
+        <div class="contact-form-title">Teklif & Demo Talebi</div>
+        <div class="contact-form-sub">Tüm alanlar zorunlu değildir.</div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="form-label">Ad Soyad *</label>
+            <input type="text" class="form-input" id="f_ad" placeholder="Adınız Soyadınız">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kurum Adı *</label>
+            <input type="text" class="form-input" id="f_kurum" placeholder="Vakıf / Dernek Adı">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefon *</label>
+            <input type="tel" class="form-input" id="f_tel" placeholder="05XX XXX XX XX">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">E-posta</label>
+            <input type="email" class="form-input" id="f_email" placeholder="ornek@kurum.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">İlgilendiğiniz Plan</label>
+            <select class="form-select" id="f_plan">
+              <option value="">Plan Seçin</option>
+              <option value="Başlangıç">Başlangıç — ₺990/ay</option>
+              <option value="Standart">Standart — ₺2.490/ay</option>
+              <option value="Kurumsal">Kurumsal — Özel Teklif</option>
+              <option value="Demo">Önce Demo İstiyorum</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mesajınız</label>
+          <textarea class="form-textarea" id="f_mesaj" placeholder="Sormak istediğiniz sorular veya özel ihtiyaçlarınız..."></textarea>
+        </div>
+        <button class="form-submit" onclick="formGonder()">🚀 Teklif & Demo Talebi Gönder</button>
+      </div>
+      <div class="form-success" id="formSuccess">
+        <div class="form-success-icon">✅</div>
+        <h3>Talebiniz Alındı!</h3>
+        <p>En geç 1 iş günü içinde sizi arayacağız.<br>WhatsApp: <strong>+90 535 586 58 86</strong></p>
+      </div>
+    </div>
+
+    <!-- Güven badge'leri -->
+    <div class="trust-badges fade-up">
+      <div class="trust-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        SSL Şifreli
+      </div>
+      <div class="trust-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        KVKK Uyumlu
+      </div>
+      <div class="trust-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        %99 Uptime
+      </div>
+      <div class="trust-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        7/24 Destek
+      </div>
+      <div class="trust-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Kurulum Ücretsiz
+      </div>
+      <div class="trust-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        GPS Destekli
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="sss">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center">
+      <span class="section-tag">SIKÇA SORULAN SORULAR</span>
+      <h2 class="section-title">Aklınızdaki <em>Sorular</em></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">Kurulum ücreti var mı?<div class="faq-icon"></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Hayır, kurulum ücreti yoktur. Yalnızca aylık veya yıllık abonelik ücreti alınmaktadır. Başlangıç eğitimi (2 saate kadar) ve ilk ay destek oturumları aboneliğe dahildir.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">Sözleşmeden çıkış yapabilir miyim?<div class="faq-icon"></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Evet. Aylık aboneliklerde bir sonraki faturadan 30 gün önce bildirimde bulunarak çıkış yapabilirsiniz. Yıllık aboneliklerde 14 günlük cayma hakkınız mevcuttur. Çıkış durumunda verileriniz 90 gün boyunca korunur ve Excel formatında alabilirsiniz.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">Kaç kullanıcı ekleyebilirim?<div class="faq-icon"></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Başlangıç planında 10, Standart planında 25 kullanıcı ekleyebilirsiniz. Kurumsal planda sınırsız kullanıcı desteği mevcuttur. Kullanıcılara 5 farklı rol atanabilir: Merkez Başkanı, Koordinatör, Şube Sorumlusu, Kumbara Koordinatörü, Saha Görevlisi.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">Verilerim güvende mi?<div class="faq-icon"></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Evet. Tüm veriler Google Firebase altyapısında SSL şifrelemeli olarak saklanmakta ve sürekli yedeklenmektedir. KVKK uyumlu veri işleme politikamız mevcuttur. Veriler yalnızca sizin erişiminize açıktır.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">Mobil cihazda kullanabilir miyim?<div class="faq-icon"></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Evet. Sistem tüm tarayıcılarda ve cihazlarda çalışır. iOS ve Android telefonlara "Ana Ekrana Ekle" ile uygulama gibi kurabilirsiniz (PWA). Saha görevlileri için GPS konum alımı açısından mobil kullanım kritiktir.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">Demo imkânı var mı?<div class="faq-icon"></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Evet. demokumbara.mediacraft.tr adresinde tüm rolleri test edebilirsiniz. Demo şifresi: Demo2026! — tüm kullanıcılar için aynıdır.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <img src="footer-logo.svg" alt="Hayrat Takip" style="height:42px;width:auto">
+      <div class="footer-links">
+        <a href="#ozellikler">Özellikler</a>
+        <a href="#nasil-calisir">Nasıl Çalışır</a>
+        <a href="#fiyatlandirma">Fiyatlar</a>
+        <a href="#sss">SSS</a>
+        <a href="#iletisim">İletişim</a>
+        <a href="https://demokumbara.mediacraft.tr" target="_blank">Demo</a>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <div class="footer-contact">
+        <a href="https://wa.me/905355865886" target="_blank" class="footer-contact-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(255,255,255,0.45)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          +90 535 586 58 86
+        </a>
+        <a href="mailto:info@mediacraft.tr" class="footer-contact-item">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          info@mediacraft.tr
+        </a>
+      </div>
+      <div class="footer-copy">© 2026 Hayrat Takip · <a href="https://mediacraft.tr" target="_blank">MediaCraft Dijital Sistemler</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp FAB -->
+<a href="https://wa.me/905355865886?text=Hayrat%20Takip%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" class="whatsapp-fab" title="WhatsApp">💬</a>
+
+<!-- Up button -->
+<button class="up-btn" id="upBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Yukarı Çık">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
+<script>
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    document.querySelectorAll("#hdBarChart .hd-bar").forEach((bar, i) => {
+      bar.style.height = "0px";
+      setTimeout(() => { bar.style.height = bar.dataset.h + "%"; }, 400 + i * 80);
+    });
+  }, 300);
+  const canvas = document.getElementById("hdPie");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const data = [41, 30, 19, 10];
+  const colors = ["#5E81F4", "#7CE7AC", "#F4BE5E", "#FF808B"];
+  const total = 100;
+  const cx = 45, cy = 45, r = 40, ri = 24;
+  let animProgress = 0;
+  function drawPie(progress) {
+    ctx.clearRect(0, 0, 90, 90);
+    let start = -Math.PI / 2;
+    data.forEach((val, i) => {
+      const slice = (val / total) * Math.PI * 2 * progress;
+      ctx.beginPath(); ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, r, start, start + slice);
+      ctx.closePath(); ctx.fillStyle = colors[i]; ctx.fill();
+      start += slice;
+    });
+    ctx.beginPath(); ctx.arc(cx, cy, ri, 0, Math.PI * 2);
+    ctx.fillStyle = "white"; ctx.fill();
+  }
+  function animatePie() {
+    animProgress += 0.035;
+    if (animProgress > 1) animProgress = 1;
+    drawPie(animProgress);
+    if (animProgress < 1) requestAnimationFrame(animatePie);
+  }
+  setTimeout(animatePie, 700);
+});
+
+
+// Why glass kartları animasyonu
+const whyIo = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.why-glass-card').forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 150);
+      });
+      whyIo.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+const whyWrap = document.querySelector('.why-cards-wrap');
+if (whyWrap) whyIo.observe(whyWrap);
+
+// Form gönder
+function formGonder() {
+  const ad = document.getElementById('f_ad').value.trim();
+  const kurum = document.getElementById('f_kurum').value.trim();
+  const tel = document.getElementById('f_tel').value.trim();
+  if (!ad || !kurum || !tel) { alert('Lütfen Ad Soyad, Kurum ve Telefon alanlarını doldurun.'); return; }
+  const plan = document.getElementById('f_plan').value;
+  const email = document.getElementById('f_email').value;
+  const mesaj = document.getElementById('f_mesaj').value;
+  const waText = encodeURIComponent(`*Hayrat Takip - Yeni Talep*\n\n👤 Ad: ${ad}\n🏢 Kurum: ${kurum}\n📞 Tel: ${tel}\n📧 E-posta: ${email||'-'}\n📦 Plan: ${plan||'-'}\n💬 Mesaj: ${mesaj||'-'}`);
+  window.open(`https://wa.me/905355865886?text=${waText}`, '_blank');
+  document.getElementById('contactFormContent').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+
+// FAQ accordion
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const answer = item.querySelector('.faq-answer');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.faq-answer').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+
+// Up button
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('upBtn');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// Pricing toggle
+let isYearly = false;
+function togglePrice() {
+  isYearly = !isYearly;
+  const btn = document.getElementById('priceToggle');
+  btn.classList.toggle('yearly', isYearly);
+  document.getElementById('lblAylik').classList.toggle('active', !isYearly);
+  document.getElementById('lblYillik').classList.toggle('active', isYearly);
+  document.getElementById('saveBadge').style.display = isYearly ? 'inline-block' : 'none';
+  if (isYearly) {
+    document.getElementById('p1').textContent = '₺9.900';
+    document.getElementById('p1per').textContent = '/yıl';
+    document.getElementById('p1save').style.display = 'block';
+    document.getElementById('p2').textContent = '₺24.900';
+    document.getElementById('p2per').textContent = '/yıl';
+    document.getElementById('p2save').style.display = 'block';
+  } else {
+    document.getElementById('p1').textContent = '₺990';
+    document.getElementById('p1per').textContent = '/ay';
+    document.getElementById('p1save').style.display = 'none';
+    document.getElementById('p2').textContent = '₺2.490';
+    document.getElementById('p2per').textContent = '/ay';
+    document.getElementById('p2save').style.display = 'none';
+  }
+}
+
+// Roller carousel
+function scrollRoles(dir) {
+  const grid = document.querySelector('.roles-grid');
+  if (grid) grid.scrollBy({ left: dir * 340, behavior: 'smooth' });
+}
+
+// Raporlar bar chart animasyonu
+const rpBars = document.querySelectorAll('.rp-anim-bar');
+if (rpBars.length) {
+  const rpIo = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        rpBars.forEach(bar => {
+          bar.style.height = bar.dataset.h + 'px';
+        });
+        rpIo.disconnect();
+        // Sürekli sallanma animasyonu
+        setInterval(() => {
+          rpBars.forEach((bar, i) => {
+            const base = parseInt(bar.dataset.h);
+            const variance = Math.floor(Math.random() * 20) - 10;
+            bar.style.height = Math.max(20, base + variance) + 'px';
+          });
+        }, 2000);
+      }
+    });
+  }, { threshold: 0.3 });
+  rpIo.observe(document.getElementById('rpChart'));
+}
+
+// Security items animasyonu
+document.querySelectorAll('.security-item').forEach((item, i) => {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        setTimeout(() => item.classList.add('visible'), i * 100);
+        io.unobserve(item);
+      }
+    });
+  }, { threshold: 0.1 });
+  io.observe(item);
+});
+
+// Feature kartları stagger animasyonu
+const featureIo = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.feature-card').forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 100);
+      });
+      featureIo.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.features-grid').forEach(el => featureIo.observe(el));
+
+// Role kartları stagger animasyonu
+const roleIo = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.role-card').forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 90);
+      });
+      roleIo.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.roles-grid').forEach(el => roleIo.observe(el));
+
+// Scroll progress bar
+window.addEventListener('scroll', () => {
+  const sp = document.getElementById('scrollProgress');
+  const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  sp.style.width = scrolled + '%';
+  const nav = document.querySelector('nav');
+  nav.style.boxShadow = window.scrollY > 20 ? '0 2px 24px rgba(0,0,0,0.07)' : 'none';
+});
+
+// Intersection observer — fade up
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 90);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+// Counter animation
+function animateCount(el, target) {
+  let start = 0;
+  const inc = target / 55;
+  const t = setInterval(() => {
+    start += inc;
+    if (start >= target) { start = target; clearInterval(t); }
+    el.textContent = Math.floor(start) + (el.dataset.suffix || '');
+  }, 40);
+}
+const cio = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCount(e.target, parseInt(e.target.dataset.target));
+      cio.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.6 });
+document.querySelectorAll('[data-target]').forEach(el => cio.observe(el));
+
+// Chart animation handled by animateChartLoop above
+
+// Feature card stagger
+document.querySelectorAll('.feature-card').forEach((card, i) => {
+  card.style.transitionDelay = (i * 0.07) + 's';
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+// Chart bar animasyonu — px tabanlı, parent yüksekliğine göre
+function runChartAnim() {
+  const wrap = document.getElementById('chartWrap');
+  if (!wrap) return;
+  const wrapH = wrap.offsetHeight || 130;
+  const bars = wrap.querySelectorAll('.chart-bar');
+  // Önce sıfırla
+  bars.forEach(bar => {
+    gsap.killTweensOf(bar);
+    bar.style.height = '2px';
+  });
+  // Sonra sırayla büyüt
+  bars.forEach((bar, i) => {
+    const pct = parseInt(bar.dataset.h) || 50;
+    const targetPx = Math.round((pct / 100) * wrapH);
+    gsap.to(bar, {
+      height: targetPx + 'px',
+      duration: 0.55,
+      delay: i * 0.1,
+      ease: 'power3.out'
+    });
+  });
+}
+
+// Sayfa yüklenince başlat, 5sn'de bir tekrarla
+window.addEventListener('load', function() {
+  // İlk render için kısa gecikme
+  setTimeout(runChartAnim, 600);
+  setInterval(runChartAnim, 5000);
+});
+
+// Sayaç animasyonu
+(function() {
+  var counters = document.querySelectorAll('.why-num[data-target]');
+  var animated = new Set();
+  function animateCounter(el) {
+    if (animated.has(el)) return;
+    animated.add(el);
+    var target = parseInt(el.getAttribute('data-target'), 10);
+    var prefix = el.getAttribute('data-prefix') || '';
+    var suffix = el.getAttribute('data-suffix') || '';
+    var duration = 1200;
+    var start = null;
+    function step(ts) {
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var ease = 1 - Math.pow(1 - progress, 3);
+      el.textContent = prefix + Math.round(ease * target) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) animateCounter(entry.target);
+    });
+  }, { threshold: 0.4 });
+  counters.forEach(function(el) { observer.observe(el); });
+})();
+</script>
+</body>
+</html>
