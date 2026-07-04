@@ -546,7 +546,7 @@ footer{background:#0a0a1a;padding:48px 48px 32px;border-top:1px solid rgba(255,2
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">
+  <div class="nav-logo" style="cursor:pointer" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     <img src="header-logo.svg" alt="Hayrat Takip" style="height:38px;width:auto;position:relative;top:-4px">
   </div>
   <ul class="nav-links">
@@ -1159,7 +1159,7 @@ footer{background:#0a0a1a;padding:48px 48px 32px;border-top:1px solid rgba(255,2
           <li><span class="pf-check">✓</span>Temel raporlar</li>
           <li><span class="pf-check">✓</span>WhatsApp desteği</li>
         </ul>
-        <a href="https://wa.me/905355865886" class="pricing-btn pb-outline">Hemen Başla</a>
+        <a href="#iletisim" class="pricing-btn pb-outline">Hemen Başla</a>
       </div>
       <div class="pricing-card featured fade-up">
         <div class="featured-badge">En Popüler</div>
@@ -1177,7 +1177,7 @@ footer{background:#0a0a1a;padding:48px 48px 32px;border-top:1px solid rgba(255,2
           <li><span class="pf-check">✓</span>Kurban Organizasyonu</li>
           <li><span class="pf-check">✓</span>7/24 Destek</li>
         </ul>
-        <a href="https://wa.me/905355865886" class="pricing-btn pb-primary">Hemen Başla</a>
+        <a href="#iletisim" class="pricing-btn pb-primary">Hemen Başla</a>
       </div>
       <div class="pricing-card fade-up">
         <div class="pricing-name">Kurumsal</div>
@@ -1192,7 +1192,7 @@ footer{background:#0a0a1a;padding:48px 48px 32px;border-top:1px solid rgba(255,2
           <li><span class="pf-check">✓</span>7/24 destek</li>
           <li><span class="pf-check">✓</span>Özel SLA taahhütleri</li>
         </ul>
-        <a href="https://wa.me/905355865886" class="pricing-btn pb-outline">Teklif İste</a>
+        <a href="#iletisim" class="pricing-btn pb-outline">Teklif İste</a>
       </div>
     </div>
   </div>
@@ -1250,7 +1250,7 @@ footer{background:#0a0a1a;padding:48px 48px 32px;border-top:1px solid rgba(255,2
       <div class="form-success" id="formSuccess">
         <div class="form-success-icon">✅</div>
         <h3>Talebiniz Alındı!</h3>
-        <p>En geç 1 iş günü içinde sizi arayacağız.<br>WhatsApp: <strong>+90 535 586 58 86</strong></p>
+        <p>En geç 1 iş günü içinde tarafınıza dönüş yapılacaktır.</p>
       </div>
     </div>
 
@@ -1477,10 +1477,6 @@ function formGonder() {
   const email = document.getElementById('f_email').value;
   const mesaj = document.getElementById('f_mesaj').value;
 
-  // WhatsApp yönlendirmesi — kullanıcı hareketiyle senkron açılmalı ki tarayıcı popup'ı engellemesin
-  const waText = encodeURIComponent(`*Hayrat Takip - Yeni Talep*\n\n👤 Ad: ${ad}\n🏢 Kurum: ${kurum}\n📞 Tel: ${tel}\n📧 E-posta: ${email||'-'}\n📦 Plan: ${plan||'-'}\n💬 Mesaj: ${mesaj||'-'}`);
-  window.open(`https://wa.me/905355865886?text=${waText}`, '_blank');
-
   // Mail — EmailJS ile info@mediacraft.tr'ye otomatik gönderim
   hayratFormGonderiliyor = true;
   emailjs.send('service_xg158p4', 'template_ncmisb6', {
@@ -1495,7 +1491,7 @@ function formGonder() {
     document.getElementById('formSuccess').style.display = 'block';
   }).catch(function(err) {
     console.error('EmailJS gönderim hatası:', err);
-    alert('Talebiniz WhatsApp üzerinden iletildi. E-posta gönderiminde bir aksaklık oldu; dilerseniz telefonla da ulaşabilirsiniz: 0535 586 58 86');
+    alert('Talebiniz gönderilirken bir aksaklık oldu. Lütfen tekrar deneyin veya bizi arayın: 0535 586 58 86');
   }).finally(function() {
     hayratFormGonderiliyor = false;
   });
