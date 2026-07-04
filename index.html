@@ -535,6 +535,10 @@ footer{background:#0a0a1a;padding:48px 48px 32px;border-top:1px solid rgba(255,2
   .video-tanitim .video-play-btn { width: 60px; height: 60px; }
 }
 </style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+  (function(){ emailjs.init({ publicKey: '-QqNyNWKSGFPY_yM4' }); })();
+</script>
 </head>
 <body>
 
@@ -1461,7 +1465,10 @@ const whyWrap = document.querySelector('.why-cards-wrap');
 if (whyWrap) whyIo.observe(whyWrap);
 
 // Form gönder
+let hayratFormGonderiliyor = false;
 function formGonder() {
+  if (hayratFormGonderiliyor) return;
+
   const ad = document.getElementById('f_ad').value.trim();
   const kurum = document.getElementById('f_kurum').value.trim();
   const tel = document.getElementById('f_tel').value.trim();
@@ -1469,10 +1476,29 @@ function formGonder() {
   const plan = document.getElementById('f_plan').value;
   const email = document.getElementById('f_email').value;
   const mesaj = document.getElementById('f_mesaj').value;
+
+  // WhatsApp yönlendirmesi — kullanıcı hareketiyle senkron açılmalı ki tarayıcı popup'ı engellemesin
   const waText = encodeURIComponent(`*Hayrat Takip - Yeni Talep*\n\n👤 Ad: ${ad}\n🏢 Kurum: ${kurum}\n📞 Tel: ${tel}\n📧 E-posta: ${email||'-'}\n📦 Plan: ${plan||'-'}\n💬 Mesaj: ${mesaj||'-'}`);
   window.open(`https://wa.me/905355865886?text=${waText}`, '_blank');
-  document.getElementById('contactFormContent').style.display = 'none';
-  document.getElementById('formSuccess').style.display = 'block';
+
+  // Mail — EmailJS ile info@mediacraft.tr'ye otomatik gönderim
+  hayratFormGonderiliyor = true;
+  emailjs.send('service_xg158p4', 'template_ncmisb6', {
+    name: ad,
+    kurum: kurum,
+    tel: tel,
+    email: email || '-',
+    plan: plan || '-',
+    mesaj: mesaj || '-'
+  }).then(function() {
+    document.getElementById('contactFormContent').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }).catch(function(err) {
+    console.error('EmailJS gönderim hatası:', err);
+    alert('Talebiniz WhatsApp üzerinden iletildi. E-posta gönderiminde bir aksaklık oldu; dilerseniz telefonla da ulaşabilirsiniz: 0535 586 58 86');
+  }).finally(function() {
+    hayratFormGonderiliyor = false;
+  });
 }
 
 // Mobil hamburger menü
